@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+            <link href="./SigninTemplateBootstrap/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+            <style>
+              .bd-placeholder-img {
+                font-size: 1.125rem;
+                text-anchor: middle;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+              }
+        
+              @media (min-width: 768px) {
+                .bd-placeholder-img-lg {
+                  font-size: 3.5rem;
+                }
+              }
+             
+              
+            </style>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link href="./SigninTemplateBootstrap/signin.css" rel="stylesheet">
+
+    </head>
+
+    <body class="text-center">
+      <br><br>
+            <div class="jumbotron" style="padding-top:150px">
+                <h1 class="display-4">Ankh-Morpork City Watch Reimbursements</h1>
+                <hr class="my-4">
+                <img class="mb-4" src="city-watch-badge.png" alt="" width="150" height="150">
+                <p><i>FABRICATI DIEM, PVNC</i></p>
+                <form class="form-signin" action=javascript:onSubmit()>
+                  <h1 class="h3 mb-3 font-weight-normal" id="Signin">Please sign in.</h1>
+                  <label for="inputUsername" class="sr-only">Username</label>
+                  <input type="text" id="inputUsername" class="form-control" placeholder="Username" required="" autofocus="">
+                  <label for="inputPassword" class="sr-only">Password</label>
+                  <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+                  <!-- <div class="checkbox mb-3">
+                    <label>
+                      <input type="checkbox" value="remember-me"> Remember me
+                    </label>
+                  </div> -->
+                  <button type="" class="btn btn-lg btn-primary btn-block" >Sign in</button>
+                  <p class="mt-5 mb-3 text-muted">Founded AM 1591</p>
+                  
+                </form>
+
+
+        
+    </body>
+
+    <script>
+        function onSubmit(){
+
+            
+                let username = document.getElementById("inputUsername").value;
+                let password = document.getElementById("inputPassword").value;
+                let user = null;
+                let signin = document.getElementById("Signin");
+                
+                
+                let xhttp = new XMLHttpRequest();
+                
+            xhttp.onreadystatechange = function() {
+              console.log(this.readyState + " is the ready state")
+                if(this.readyState == 4 && this.status == 200) {
+        
+                    user = JSON.parse(this.responseText);
+                    console.log(user);
+                    if((user.password === "-1")||(user.password === "-2")){
+                      signin.innerHTML ="Invalid username/password. Please sign in."
+                    } else if ((user.rank === "Commander") || (user.rank === "Captain")) {
+                      //need to forward to next page with employee id. Not sure how yet
+                      console.log("Manager");
+                    } else {
+                      window.location = "http://localhost:8080/AMWatch/employeePage.html";
+
+                    }
+                 
+                }
+                
+            };
+
+            xhttp.open("post", "http://localhost:8080/AMWatch/login.do", true);
+            xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhttp.send(`username=${username}&password=${password}`);
+   
+            
+        }
+
+    </script>
+
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+<style>
+
+
+table.blueTable {
+  border: 1px solid #1C6EA4;
+  background-color: #EEEEEE;
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+}
+table.blueTable td, table.blueTable th {
+  border: 1px solid #AAAAAA;
+  padding: 3px 2px;
+}
+table.blueTable tbody td {
+  font-size: 13px;
+}
+table.blueTable tr:nth-child(even) {
+  background: #D0E4F5;
+}
+table.blueTable thead {
+  background: #1C6EA4;
+  background: -moz-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+  background: -webkit-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+  background: linear-gradient(to bottom, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+  border-bottom: 2px solid #444444;
+}
+table.blueTable thead th {
+  font-size: 15px;
+  font-weight: bold;
+  color: #FFFFFF;
+  border-left: 2px solid #D0E4F5;
+}
+table.blueTable thead th:first-child {
+  border-left: none;
+}
+
+table.blueTable tfoot {
+  font-size: 14px;
+  font-weight: bold;
+  color: #FFFFFF;
+  background: #D0E4F5;
+  background: -moz-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+  background: -webkit-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+  background: linear-gradient(to bottom, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+  border-top: 2px solid #444444;
+}
+table.blueTable tfoot td {
+  font-size: 14px;
+}
+table.blueTable tfoot .links {
+  text-align: right;
+}
+table.blueTable tfoot .links a{
+  display: inline-block;
+  background: #1C6EA4;
+  color: #FFFFFF;
+  padding: 2px 8px;
+  border-radius: 5px;
+}
+</style>
+
+</head>
+
+<body onload="listTransactions()">
+<br>
+<table class="blueTable">
+    <h1 style= "background-color:#1C6EA4; color:#FFFFFF">Reimbursements</h1>
+    <button onclick="createReimbursement()" style = "background-color:#D0E4F5">Create New Reimbursement</button>
+    <thead>
+    <tr>
+    <th>Reimbursement ID</th>
+    <th>Title</th>
+    <th>Description</th>
+    <th>Amount</th>
+    <th>Status</th>
+    <th>Reviewed By</th>
+    <th>Response</th>
+    </tr>
+    </thead>
+    <tfoot>
+    <tr>
+    <td colspan="2">
+    <div class="links"><a href="#">&laquo;</a> <a class="active" href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a> <a href="#">&raquo;</a></div>
+    </td>
+    </tr>
+    </tfoot>
+    <tbody id = "reimbursements">
+    </tbody>
+    </table>
+    </body>
+    <script>
+        function createReimbursement(){
+          window.location = "http://localhost:8080/AMWatch/createReimbursement.html";
+        }
+
+        function listReimbursements(){
+
+            let xhttp = new XMLHttpRequest();
+
+            xhttp.onreadystatechange = function() {
+                if(this.readyState == 4 && this.status == 200) {
+                    console.log("call successful")
+                    reimbursements = JSON.parse(this.responseText);
+                    let table = "";
+                    console.log(reimbursements)
+                    if(reimbursements.length == 0) {
+                        table = "No reimbursements on file."
+                    }
+                    
+                    let createRow =  function (reimbursement){
+                        let comment = "";
+                        let status = "Unreviewed";
+                        let response = "Unreviewed";
+                        let manager = "Unreviewed";
+                        if(reimbursement.comment === undefined){
+                            comment = "No description."
+                        } else {
+                            comment = reimbursement.comment;
+                        }
+                        if(reimbursement.status === -1){
+                            status = "Denied";
+                            manager = reimbursement.managerID;
+                            if(reimbursement.response != undefined) {
+                                response = reimbursement.response;
+                            } else {
+                                response = "No comments."
+                            }
+                        } else if (reimbursement.status === 1) {
+                            status = "Approved";
+                            manager = reimbursement.managerID;
+                            if(reimbursement.response != undefined) {
+                                response = reimbursement.response;
+                            } else {
+                                response = "No comments."
+                            }
+                        } 
+                        let rv = `<tr><td>${reimbursement.reimbursementID}</td><td>${reimbursement.title}</td><td>${comment}</td><td>${reimbursement.amount}</td><td>${status}</td><td>${manager}</td><td>${response}</td></tr>`;
+                        table = table + rv;
+                    }
+                    reimbursements.forEach(createRow);
+                    let list = document.getElementById("reimbursements");
+                    list.innerHTML = table;
+
+                   
+ 
+                }
+
+            };
+
+            xhttp.open("get", "http://localhost:8080/AMWatch/getReimbursements.do", true);
+            xhttp.send();
+
+
+        }
+
+        
+
+
+
+        window.onload  = listReimbursements()
+    </script>
+    </html>
