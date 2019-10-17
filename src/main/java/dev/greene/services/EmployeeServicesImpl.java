@@ -34,6 +34,7 @@ public class EmployeeServicesImpl implements EmployeeServices {
 		Employee actual = eDAO.getEmployeeByUsername(employee.getUsername());
 		if(actual != null) {
 			if(actual.getPassword().equals(employee.getPassword())) {
+				employee.setPassword("1");
 				return actual;
 				
 			} else {
@@ -41,7 +42,7 @@ public class EmployeeServicesImpl implements EmployeeServices {
 				return employee;
 			}
 		} else {
-			employee.setPassword("-2");
+			employee.setPassword("-1");
 			return employee;
 		}
 	}

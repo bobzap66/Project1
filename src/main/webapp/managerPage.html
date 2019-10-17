@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+<style>
+
+
+table.blueTable {
+  border: 1px solid #1C6EA4;
+  background-color: #EEEEEE;
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+}
+table.blueTable td, table.blueTable th {
+  border: 1px solid #AAAAAA;
+  padding: 3px 2px;
+}
+table.blueTable tbody td {
+  font-size: 13px;
+}
+table.blueTable tr:nth-child(even) {
+  background: #D0E4F5;
+}
+table.blueTable thead {
+  background: #1C6EA4;
+  background: -moz-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+  background: -webkit-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+  background: linear-gradient(to bottom, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+  border-bottom: 2px solid #444444;
+}
+table.blueTable thead th {
+  font-size: 15px;
+  font-weight: bold;
+  color: #FFFFFF;
+  border-left: 2px solid #D0E4F5;
+}
+table.blueTable thead th:first-child {
+  border-left: none;
+}
+
+table.blueTable tfoot {
+  font-size: 14px;
+  font-weight: bold;
+  color: #FFFFFF;
+  background: #D0E4F5;
+  background: -moz-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+  background: -webkit-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+  background: linear-gradient(to bottom, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+  border-top: 2px solid #444444;
+}
+table.blueTable tfoot td {
+  font-size: 14px;
+}
+table.blueTable tfoot .links {
+  text-align: right;
+}
+table.blueTable tfoot .links a{
+  display: inline-block;
+  background: #1C6EA4;
+  color: #FFFFFF;
+  padding: 2px 8px;
+  border-radius: 5px;
+}
+</style>
+
+</head>
+
+<body onload="getAll()" style= "background-color: #D0E4F5;"> 
+<br>
+<h1 style= "background-color:#1C6EA4; color:#FFFFFF" id = "welcome">Welcome, Employee!</h1>
+<br>
+<table class="blueTable" id="myTable">
+    <h1 style= "background-color:#1C6EA4; color:#FFFFFF">Reimbursements</h1>
+    <button onclick="getPending()" style = "background-color:#FFFFFF">Show Pending Reimbursements</button>
+    <button onclick="getAll()" style = "background-color:#FFFFFF">Show All Reimbursements</button>
+    <button onclick="logout()" style = "background-color:#FFFFFF">Log Out</button>
+  
+    <thead>
+    <tr>
+    <th onclick="sortTable(0)">Reimbursement ID</th>
+    <th onclick="sortTable(1)">Title</th>
+    <th onclick="sortTable(2)">Description</th>
+    <th onclick="sortTable(3)">Amount</th>
+    <th onclick="sortTable(4)">Date Requested</th>
+    <th onclick="sortTable(5)" id="statusHead">Status</th>
+    <th onclick="sortTable(6)" id="reviewedHead">Reviewed By</th>
+    <th onclick="sortTable(7)" id="responseHead">Response</th>
+    </tr>
+    </thead>
+    <tfoot>
+    <tr>
+    <td colspan="2">
+    <div class="links"><a href="#">&laquo;</a> <a class="active" href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a> <a href="#">&raquo;</a></div>
+    </td>
+    </tr>
+    </tfoot>
+    <tbody id = "reimbursements">
+    </tbody>
+    </table>
+    </body>
+    <script>
+        function logout() {
+          let xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            if(this.readyState == 4 && this.status == 200) {
+              window.location = "http://localhost:8080/AMWatch/loginPage.html";
+
+              
+                    
+
+                
+            };  
+          }
+            xhttp.open("get", "http://localhost:8080/AMWatch/logout.do", true);
+            xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhttp.send();
+          
+
+        }
+        function reply(reimbursementID, reimbursementStatus, response) {
+          console.log("reply called.")
+          let xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            if(this.readyState == 4 && this.status == 200) {
+              console.log("Successfully reached server");
+              worked = JSON.parse(this.responseText);
+              if(worked == "1") {
+                console.log("Successfully updated reimbursement");
+              }
+                    
+
+                
+            };  
+          }
+            xhttp.open("post", "http://localhost:8080/AMWatch/updateReimbursement.do", true);
+            xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhttp.send(`reimbursementID=${reimbursementID}&reimbursementStatus=${reimbursementStatus}&response=${response}`);
+          
+        }
+        function createReimbursement(){
+          window.location = "http://localhost:8080/AMWatch/createReimbursement.html";
+        }
+
+        function getEmployeeInfo(){
+            let xhttp = new XMLHttpRequest();
+            let welcomeMessage = document.getElementById("welcome");
+
+            xhttp.onreadystatechange = function() {
+                if(this.readyState == 4 && this.status == 200) { 
+                
+                  employee = JSON.parse(this.responseText);
+                  welcomeMessage.innerHTML = `Welcome, ${employee.rank} ${employee.lName}!`
+                  
+
+                }
+
+        };
+
+    xhttp.open("get", "http://localhost:8080/AMWatch/getEmployeeInfo.do", true);
+    xhttp.send();
+
+
+}          
+        function getPending(){
+            let xhttp = new XMLHttpRequest();
+
+
+            xhttp.onreadystatechange = function() {
+                if(this.readyState == 4 && this.status == 200) {
+                   
+                    reimbursements = JSON.parse(this.responseText);
+                    let table = "";
+                    if(reimbursements.length == 0) {
+                        table = "No reimbursements on file."
+                    }
+                    
+                    let createRow =  function (reimbursement){
+                        let statHead = document.getElementById("statusHead");
+                        statHead.innerHTML="Response";
+                        let respHead = document.getElementById("reviewedHead");
+                        respHead.innerHTML="Deny";
+                        let revHead = document.getElementById("responseHead");
+                        revHead.innerHTML="Approve";
+                        let status = "Unreviewed";
+                        let response = "Unreviewed";
+                        let manager = "Unreviewed";
+                        let comment;
+                        if(reimbursement.comment === undefined){
+                            comment = "No description."
+                        } else {
+                            comment = reimbursement.comment;
+                        }
+                        
+                        let amount = formatMoney(reimbursement.amount);
+                        let time = reimbursement.time;
+                        let date = new Date(time);
+                        let rv = `<tr><td>${reimbursement.reimbursementID}</td><td>${reimbursement.title}</td>
+                          <td>${comment}</td><td>${amount}</td><td>${date.toDateString()}</td><td><input type="text" id="response${reimbursement.reimbursementID}"></td>
+                          <td><button onclick='reply(${reimbursement.reimbursementID}, -1, document.getElementById("response${reimbursement.reimbursementID}").value)'>&#88;</button></td> 
+                          <td><button onclick='reply(${reimbursement.reimbursementID}, 1, document.getElementById("response${reimbursement.reimbursementID}").value)'>&#10003;</button></td></tr>`;
+                        table = table + rv;
+                    }
+                    reimbursements.forEach(createRow);
+                    let list = document.getElementById("reimbursements");
+                    list.innerHTML = table;
+
+                   
+ 
+                }
+
+            };
+
+            xhttp.open("get", "http://localhost:8080/AMWatch/getPendingReimbursements.do", true);
+            xhttp.send();
+            getEmployeeInfo();
+
+        }
+
+
+        function getAll(){
+            let xhttp = new XMLHttpRequest();
+
+            xhttp.onreadystatechange = function() {
+                if(this.readyState == 4 && this.status == 200) {
+
+                        let statHead = document.getElementById("statusHead");
+                        statHead.innerHTML="Status";
+                        let respHead = document.getElementById("reviewedHead");
+                        respHead.innerHTML="Reviewed by";
+                        let revHead = document.getElementById("responseHead");
+                        revHead.innerHTML="Response";
+                   
+                    reimbursements = JSON.parse(this.responseText);
+                    let table = "";
+                    if(reimbursements.length == 0) {
+                        table = "No reimbursements on file."
+                    }
+                    
+                    let createRow =  function (reimbursement){
+                        let comment;
+                        let status = "Unreviewed";
+                        let response = "Unreviewed";
+                        let manager = "Unreviewed";
+                        if(reimbursement.comment === undefined){
+                            comment = "No description."
+                        } else {
+                            comment = reimbursement.comment;
+                        }
+                        if(reimbursement.status === -1){
+                            status = "Denied";
+                            manager = reimbursement.managerID;
+                            if(reimbursement.response != undefined) {
+                                response = reimbursement.response;
+                            } else {
+                                response = "No comments."
+                            }
+                        } else if (reimbursement.status === 1) {
+                            status = "Approved";
+                            manager = reimbursement.managerID;
+                            if(reimbursement.response != undefined) {
+                                response = reimbursement.response;
+                            } else {
+                                response = "No comments."
+                            }
+                        } 
+                        let amount = formatMoney(reimbursement.amount);
+                        let time = reimbursement.time;
+                        let date = new Date(time);
+
+                        let rv = `<tr><td>${reimbursement.reimbursementID}</td><td>${reimbursement.title}</td><td>${comment}</td><td>${amount}</td><td>${date.toDateString()}</td><td>${status}</td><td>${manager}</td><td>${response}</td></tr>`;
+                        table = table + rv;
+                    }
+                    reimbursements.forEach(createRow);
+                    let list = document.getElementById("reimbursements");
+                    list.innerHTML = table;
+
+                   
+ 
+                }
+
+            };
+
+            xhttp.open("get", "http://localhost:8080/AMWatch/getAllReimbursements.do", true);
+            xhttp.send();
+            getEmployeeInfo();
+
+        }
+
+        function formatMoney(amount){
+        // All money is dollars with two fractional digits...right?
+        return "$" + amount.toFixed(2);
+        }
+
+
+        function sortTable(column) {
+          var table, rows, switching, i, x, y, shouldSwitch;
+          table = document.getElementById("myTable");
+          switching = true;
+          /*Make a loop that will continue until
+          no switching has been done:*/
+          while (switching) {
+            //start by saying: no switching is done:
+            switching = false;
+            rows = table.rows;
+            /*Loop through all table rows (except the
+            first, which contains table headers):*/
+            for (i = 1; i < (rows.length - 2); i++) {
+            //start by saying there should be no switching:
+              shouldSwitch = false;
+              /*Get the two elements you want to compare,
+              one from current row and one from the next:*/
+              x = rows[i].getElementsByTagName("TD")[column];
+              y = rows[i + 1].getElementsByTagName("TD")[column];
+              //check if the two rows should switch place:
+              if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+              //if so, mark as a switch and break the loop:
+              shouldSwitch = true;
+              break;
+              }
+            }
+          if (shouldSwitch) {
+          /*If a switch has been marked, make the switch
+          and mark that a switch has been done:*/
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+          }
+        }
+      }
+
+
+        window.onload  = getAll()
+    </script>
+    </html>

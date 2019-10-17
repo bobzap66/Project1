@@ -7,7 +7,7 @@ import dev.greene.entities.Reimbursement;
 public interface ManagerServices {
 	List<Reimbursement> getAllReimbursements();
 	List<Reimbursement> getAllPendingReimbursements();
-	Reimbursement updateReimbursement();
+	Reimbursement updateReimbursement(Reimbursement reimbursement);
 	
 	
 

@@ -72,12 +72,11 @@
                 if(this.readyState == 4 && this.status == 200) {
         
                     user = JSON.parse(this.responseText);
-                    console.log(user);
                     if((user.password === "-1")||(user.password === "-2")){
                       signin.innerHTML ="Invalid username/password. Please sign in."
                     } else if ((user.rank === "Commander") || (user.rank === "Captain")) {
                       //need to forward to next page with employee id. Not sure how yet
-                      console.log("Manager");
+                      window.location = "http://localhost:8080/AMWatch/managerPage.html";
                     } else {
                       window.location = "http://localhost:8080/AMWatch/employeePage.html";
 

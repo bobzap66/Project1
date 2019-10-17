@@ -67,17 +67,20 @@ table.blueTable tfoot .links a{
 
 </head>
 
-<body onload="listTransactions()">
+<body onload="listTransactions()" style= "background-color: #D0E4F5;"> 
+<br>
+<h1 style= "background-color:#1C6EA4; color:#FFFFFF" id = "welcome">Welcome, Employee!</h1>
 <br>
 <table class="blueTable">
     <h1 style= "background-color:#1C6EA4; color:#FFFFFF">Reimbursements</h1>
-    <button onclick="createReimbursement()" style = "background-color:#D0E4F5">Create New Reimbursement</button>
+    <button onclick="createReimbursement()" style = "background-color:#FFFFFF">Create New Reimbursement</button>
     <thead>
     <tr>
     <th>Reimbursement ID</th>
     <th>Title</th>
     <th>Description</th>
     <th>Amount</th>
+    <th>Date Requested</th>
     <th>Status</th>
     <th>Reviewed By</th>
     <th>Response</th>
@@ -99,22 +102,40 @@ table.blueTable tfoot .links a{
           window.location = "http://localhost:8080/AMWatch/createReimbursement.html";
         }
 
-        function listReimbursements(){
+        function getEmployeeInfo(){
+            let xhttp = new XMLHttpRequest();
+            let welcomeMessage = document.getElementById("welcome");
 
+            xhttp.onreadystatechange = function() {
+                if(this.readyState == 4 && this.status == 200) { 
+                
+                  employee = JSON.parse(this.responseText);
+                  welcomeMessage.innerHTML = `Welcome, ${employee.rank} ${employee.lName}!`
+
+                }
+
+        };
+
+    xhttp.open("get", "http://localhost:8080/AMWatch/getEmployeeInfo.do", true);
+    xhttp.send();
+
+
+}      
+
+        function listReimbursements(){
             let xhttp = new XMLHttpRequest();
 
             xhttp.onreadystatechange = function() {
                 if(this.readyState == 4 && this.status == 200) {
-                    console.log("call successful")
+       
                     reimbursements = JSON.parse(this.responseText);
                     let table = "";
-                    console.log(reimbursements)
                     if(reimbursements.length == 0) {
                         table = "No reimbursements on file."
                     }
                     
                     let createRow =  function (reimbursement){
-                        let comment = "";
+                        let comment;
                         let status = "Unreviewed";
                         let response = "Unreviewed";
                         let manager = "Unreviewed";
@@ -140,7 +161,11 @@ table.blueTable tfoot .links a{
                                 response = "No comments."
                             }
                         } 
-                        let rv = `<tr><td>${reimbursement.reimbursementID}</td><td>${reimbursement.title}</td><td>${comment}</td><td>${reimbursement.amount}</td><td>${status}</td><td>${manager}</td><td>${response}</td></tr>`;
+                        let amount = formatMoney(reimbursement.amount);
+                        let time = reimbursement.time;
+                        let date = new Date(time);
+
+                        let rv = `<tr><td>${reimbursement.reimbursementID}</td><td>${reimbursement.title}</td><td>${comment}</td><td>${amount}</td><td>${date.toDateString()}</td><td>${status}</td><td>${manager}</td><td>${response}</td></tr>`;
                         table = table + rv;
                     }
                     reimbursements.forEach(createRow);
@@ -155,12 +180,15 @@ table.blueTable tfoot .links a{
 
             xhttp.open("get", "http://localhost:8080/AMWatch/getReimbursements.do", true);
             xhttp.send();
-
+            getEmployeeInfo();
 
         }
 
-        
-
+        function formatMoney(amount)
+        {
+        // All money is dollars with two fractional digits...right?
+        return "$" + amount.toFixed(2);
+        }
 
 
         window.onload  = listReimbursements()

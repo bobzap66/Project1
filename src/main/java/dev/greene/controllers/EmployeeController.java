@@ -39,41 +39,50 @@ public class EmployeeController {
 			
 		}
 		
+public static void getEmployeeInfo(HttpServletRequest request, HttpServletResponse response) throws IOException {
+			
+			HttpSession sess = request.getSession();
+			Employee employee = (Employee) sess.getAttribute("employee");
+			Gson gson = new Gson();
+			String json = gson.toJson(employee);
+			PrintWriter pw = response.getWriter();
+			pw.append(json);
+			
+		}
+		
 		public static void allReimbursements(HttpServletRequest request, HttpServletResponse response) throws IOException {
 	
 			HttpSession sess = request.getSession();
 			Employee employee = (Employee) sess.getAttribute("employee");
-			System.out.println("allReimbursements called");
 
 			
 			Gson gson = new Gson();
 			List<Reimbursement> reimbursements = es.getReimbursements(employee);
-			System.out.println(employee);
+
 			String json = gson.toJson(reimbursements);
 			
 			PrintWriter pw = response.getWriter();
 			pw.append(json);
-			System.out.println(json);
+
 		}
 		
 		public static void createReimbursement(HttpServletRequest request, HttpServletResponse response) {
-			System.out.println("create reimbursement called in employee controller");
 			HttpSession sess = request.getSession();
 			Employee employee = (Employee) sess.getAttribute("employee");
 			int employeeID = employee.getId();
-//			int employeeID = 8;
+
 			Reimbursement reimbursement = new Reimbursement();
 			double amount = Double.parseDouble(request.getParameter("amount"));
 			String title = request.getParameter("title");
 			String comment = request.getParameter("comment");
-			System.out.println(comment);
+
 			reimbursement.setEmployeeID(employeeID);
 			reimbursement.setAmount(amount);
 			reimbursement.setTitle(title);
 			reimbursement.setComment(comment);
-			System.out.println(reimbursement);
+
 			boolean worked = es.requestReimbursement(reimbursement);
-			System.out.println(worked);
+
 			
 			Gson gson = new Gson();
 			String json = gson.toJson(worked);
@@ -89,5 +98,8 @@ public class EmployeeController {
 			pw.append(json);
 
 		}
-
+		public static void logout(HttpServletRequest request, HttpServletResponse response) {
+			HttpSession sess = request.getSession();
+			sess.invalidate();
+		}
 }
