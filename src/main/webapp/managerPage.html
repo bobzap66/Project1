@@ -75,18 +75,20 @@ table.blueTable tfoot .links a{
     <h1 style= "background-color:#1C6EA4; color:#FFFFFF">Reimbursements</h1>
     <button onclick="getPending()" style = "background-color:#FFFFFF">Show Pending Reimbursements</button>
     <button onclick="getAll()" style = "background-color:#FFFFFF">Show All Reimbursements</button>
+    <button onclick="getStats()" style = "background-color:#FFFFFF">Get Reimbursement Statistics</button>
     <button onclick="logout()" style = "background-color:#FFFFFF">Log Out</button>
-  
+    
     <thead>
     <tr>
     <th onclick="sortTable(0)">Reimbursement ID</th>
     <th onclick="sortTable(1)">Title</th>
     <th onclick="sortTable(2)">Description</th>
     <th onclick="sortTable(3)">Amount</th>
-    <th onclick="sortTable(4)">Date Requested</th>
-    <th onclick="sortTable(5)" id="statusHead">Status</th>
-    <th onclick="sortTable(6)" id="reviewedHead">Reviewed By</th>
-    <th onclick="sortTable(7)" id="responseHead">Response</th>
+    <th onclick="sortTable(4)">Employee ID</th>
+    <th onclick="sortTable(5)">Date Requested</th>
+    <th onclick="sortTable(6)" id="statusHead">Status</th>
+    <th onclick="sortTable(7)" id="reviewedHead">Reviewed By</th>
+    <th onclick="sortTable(8)" id="responseHead">Response</th>
     </tr>
     </thead>
     <tfoot>
@@ -124,11 +126,8 @@ table.blueTable tfoot .links a{
           let xhttp = new XMLHttpRequest();
           xhttp.onreadystatechange = function() {
             if(this.readyState == 4 && this.status == 200) {
-              console.log("Successfully reached server");
-              worked = JSON.parse(this.responseText);
-              if(worked == "1") {
-                console.log("Successfully updated reimbursement");
-              }
+                getPending();
+             
                     
 
                 
@@ -163,6 +162,9 @@ table.blueTable tfoot .links a{
 
 
 }          
+function getStats(){
+          window.location = "http://localhost:8080/AMWatch/statistics.html";
+        }
         function getPending(){
             let xhttp = new XMLHttpRequest();
 
@@ -173,7 +175,7 @@ table.blueTable tfoot .links a{
                     reimbursements = JSON.parse(this.responseText);
                     let table = "";
                     if(reimbursements.length == 0) {
-                        table = "No reimbursements on file."
+                        table = "No pending reimbursements."
                     }
                     
                     let createRow =  function (reimbursement){
@@ -197,9 +199,9 @@ table.blueTable tfoot .links a{
                         let time = reimbursement.time;
                         let date = new Date(time);
                         let rv = `<tr><td>${reimbursement.reimbursementID}</td><td>${reimbursement.title}</td>
-                          <td>${comment}</td><td>${amount}</td><td>${date.toDateString()}</td><td><input type="text" id="response${reimbursement.reimbursementID}"></td>
-                          <td><button onclick='reply(${reimbursement.reimbursementID}, -1, document.getElementById("response${reimbursement.reimbursementID}").value)'>&#88;</button></td> 
-                          <td><button onclick='reply(${reimbursement.reimbursementID}, 1, document.getElementById("response${reimbursement.reimbursementID}").value)'>&#10003;</button></td></tr>`;
+                          <td>${comment}</td><td>${amount}</td><td>${reimbursement.EmployeeID}</td><td>${date.toDateString()}</td><td><input type="text" id="response${reimbursement.reimbursementID}"></td>
+                          <td><button  onclick='reply(${reimbursement.reimbursementID}, -1, document.getElementById("response${reimbursement.reimbursementID}" ).value)'style = "background-color:red; color:white ">&#88;</button></td> 
+                          <td><button onclick='reply(${reimbursement.reimbursementID}, 1, document.getElementById("response${reimbursement.reimbursementID}").value)' style = "background-color:green; color:white">&#10003;</button></td></tr>`;
                         table = table + rv;
                     }
                     reimbursements.forEach(createRow);
@@ -214,7 +216,6 @@ table.blueTable tfoot .links a{
 
             xhttp.open("get", "http://localhost:8080/AMWatch/getPendingReimbursements.do", true);
             xhttp.send();
-            getEmployeeInfo();
 
         }
 
@@ -269,7 +270,7 @@ table.blueTable tfoot .links a{
                         let time = reimbursement.time;
                         let date = new Date(time);
 
-                        let rv = `<tr><td>${reimbursement.reimbursementID}</td><td>${reimbursement.title}</td><td>${comment}</td><td>${amount}</td><td>${date.toDateString()}</td><td>${status}</td><td>${manager}</td><td>${response}</td></tr>`;
+                        let rv = `<tr><td>${reimbursement.reimbursementID}</td><td>${reimbursement.title}</td><td>${comment}</td><td>${amount}</td><td>${reimbursement.EmployeeID}</td><td>${date.toDateString()}</td><td>${status}</td><td>${manager}</td><td>${response}</td></tr>`;
                         table = table + rv;
                     }
                     reimbursements.forEach(createRow);
@@ -284,7 +285,6 @@ table.blueTable tfoot .links a{
 
             xhttp.open("get", "http://localhost:8080/AMWatch/getAllReimbursements.do", true);
             xhttp.send();
-            getEmployeeInfo();
 
         }
 
@@ -331,5 +331,6 @@ table.blueTable tfoot .links a{
 
 
         window.onload  = getAll()
+        window.onload  = getEmployeeInfo();
     </script>
     </html>

@@ -51,7 +51,6 @@ public class EmployeeDAOjdbc implements EmployeeDAO{
 			return employee;
 		
 		} catch(SQLException e) {
-			e.printStackTrace();
 			return null;
 		}
 	}
@@ -77,7 +76,6 @@ public class EmployeeDAOjdbc implements EmployeeDAO{
 			return employee;
 		
 		} catch(SQLException e) {
-			e.printStackTrace();
 			return null;
 		}
 	}
@@ -109,9 +107,38 @@ public class EmployeeDAOjdbc implements EmployeeDAO{
 			return employees;	
 			
 		}catch(SQLException e) {
-			e.printStackTrace();
 			return null;
 		}	
 	}
+	@Override
+	public List<Employee> getAllManagers() {
+		try(Connection conn = connection.createConnection()) {
+			
+			String sql = "SELECT * from AnkhMorporkWatch.employee WHERE watchRank = 'Commander' or watchRank = 'Captain'";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			
+			List<Employee> employees = new ArrayList<Employee>();
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				
+				Employee employee = new Employee();
+				employee.setId(rs.getInt("employeeID"));
+				employee.setfName(rs.getString("fName"));
+				employee.setlName(rs.getString("lName"));
+				employee.setUsername(rs.getString("username"));
+				employee.setPassword(rs.getString("password"));
+				employee.setRank(rs.getString("watchRank"));
+				
+				employees.add(employee);
+				
+				}
+				return employees;	
+			
+			}catch(SQLException e) {
+				return null;
+			}
 
+	}
 }

@@ -13,8 +13,11 @@ import com.google.gson.Gson;
 
 import dev.greene.entities.Employee;
 import dev.greene.entities.Reimbursement;
+import dev.greene.entities.Statistics;
 import dev.greene.services.ManagerServices;
 import dev.greene.services.ManagerServicesImpl;
+import dev.greene.services.StatisticsServices;
+import dev.greene.services.StatisticsServicesImpl;
 
 public class ManagerController {
 	private static ManagerServices ms = ManagerServicesImpl.getManagerServices();
@@ -61,6 +64,14 @@ public class ManagerController {
 		pw.append(json);
 	}
 	
-	
+	public static void getStats(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		StatisticsServices ss = StatisticsServicesImpl.getStatisticsServices();
+		Gson gson = new Gson();
+		Statistics stats = ss.populateAll();
+		String json = gson.toJson(stats);
+		
+		PrintWriter pw = response.getWriter();
+		pw.append(json);
+	}
 
 }

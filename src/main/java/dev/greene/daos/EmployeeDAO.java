@@ -10,5 +10,6 @@ public interface EmployeeDAO {
 	Employee getEmployeeByID(int id);
 	Employee getEmployeeByUsername(String username);
 	List<Employee> getAllEmployees();
+	List<Employee> getAllManagers();
 
 }

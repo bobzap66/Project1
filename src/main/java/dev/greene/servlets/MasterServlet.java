@@ -19,7 +19,6 @@ public class MasterServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String uri = request.getRequestURI();
-		System.out.println(uri);
 		switch(uri) {
 		
 			case "/AMWatch/login.do" : {EmployeeController.loginEmployee(request, response);} break;
@@ -30,6 +29,7 @@ public class MasterServlet extends HttpServlet {
 			case "/AMWatch/getPendingReimbursements.do" : {ManagerController.pendingReimbursements(request, response);} break;
 			case "/AMWatch/updateReimbursement.do" : {ManagerController.updateReimbursement(request, response);} break;
 			case "/AMWatch/logout.do" : {EmployeeController.logout(request, response);} break;
+			case "/AMWatch/getStats.do" : {ManagerController.getStats(request, response);} break;
 		}
 
 	}

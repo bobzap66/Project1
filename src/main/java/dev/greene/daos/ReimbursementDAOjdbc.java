@@ -209,4 +209,40 @@ public class ReimbursementDAOjdbc implements ReimbursementDAO{
 			return null;
 		}
 	}
+
+	@Override
+	public List<Reimbursement> getReimbursementsByManagerID(int managerID) {
+		try(Connection conn = connection.createConnection()) {
+			String sql = "SELECT * from AnkhMorporkWatch.reimbursement WHERE managerID = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, managerID);
+		
+			List<Reimbursement> reimbursements = new ArrayList<Reimbursement>();
+		
+			ResultSet rs = ps.executeQuery();
+		
+			while(rs.next()) {
+			
+				Reimbursement reimbursement = new Reimbursement();
+				reimbursement.setReimbursementID(rs.getInt("reimbursementID"));
+				reimbursement.setEmployeeID(rs.getInt("employeeID"));
+				reimbursement.setAmount(rs.getDouble("amount"));
+				reimbursement.setStatus(rs.getInt("status"));
+				reimbursement.setTitle(rs.getString("title"));
+				reimbursement.setComment(rs.getString("comment"));
+				reimbursement.setResponse(rs.getString("response"));
+				reimbursement.setManagerID(rs.getInt("managerID"));
+				reimbursement.setTime(rs.getLong("time"));
+
+				reimbursements.add(reimbursement);
+			
+			}
+			return reimbursements;	
+		
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
 }

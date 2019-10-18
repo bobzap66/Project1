@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+<style>
+
+
+table.blueTable {
+  border: 1px solid #1C6EA4;
+  background-color: #EEEEEE;
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+}
+table.blueTable td, table.blueTable th {
+  border: 1px solid #AAAAAA;
+  padding: 3px 2px;
+}
+table.blueTable tbody td {
+  font-size: 13px;
+}
+table.blueTable tr:nth-child(even) {
+  background: #D0E4F5;
+}
+table.blueTable thead {
+  background: #1C6EA4;
+  background: -moz-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+  background: -webkit-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+  background: linear-gradient(to bottom, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+  border-bottom: 2px solid #444444;
+}
+table.blueTable thead th {
+  font-size: 15px;
+  font-weight: bold;
+  color: #FFFFFF;
+  border-left: 2px solid #D0E4F5;
+}
+table.blueTable thead th:first-child {
+  border-left: none;
+}
+
+table.blueTable tfoot {
+  font-size: 14px;
+  font-weight: bold;
+  color: #FFFFFF;
+  background: #D0E4F5;
+  background: -moz-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+  background: -webkit-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+  background: linear-gradient(to bottom, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+  border-top: 2px solid #444444;
+}
+table.blueTable tfoot td {
+  font-size: 14px;
+}
+table.blueTable tfoot .links {
+  text-align: right;
+}
+table.blueTable tfoot .links a{
+  display: inline-block;
+  background: #1C6EA4;
+  color: #FFFFFF;
+  padding: 2px 8px;
+  border-radius: 5px;
+}
+
+</style>
+
+</head>
+<body style= "background-color: #D0E4F5;"> 
+    <table class="blueTable">
+        <h1 style= "background-color:#1C6EA4; color:#FFFFFF">Reimbursements</h1>
+        <button onclick="back()" style = "background-color:#FFFFFF">Back to Manager Page</button>
+        <thead>
+        <tr>
+        <th>Metric</th>
+        <th>Result</th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+        <td colspan="2">
+        </td>
+        </tr>
+        </tfoot>
+        <tbody id = "statistics">
+        </tbody>
+        </table>
+
+        </body>
+
+        <script>
+            function back(){
+            window.location = "http://localhost:8080/AMWatch/managerPage.html";
+        }
+            
+            function getStats(){
+            let xhttp = new XMLHttpRequest();
+            let list = document.getElementById("statistics");
+            let table = "Processing...";
+            list.innerHTML = table;
+
+            xhttp.onreadystatechange = function() {
+                if(this.readyState == 4 && this.status == 200) { 
+                
+                  stats = JSON.parse(this.responseText);
+                  average = formatMoney(stats.avgSize);
+                  total = formatMoney(stats.totalAmount);
+                  approved = formatMoney(stats.amountApproved);
+                  denied = formatMoney(stats.amountDenied);
+                  outstanding = stats.totalAmount - stats.amountApproved - stats.amountDenied;
+                  outstanding = formatMoney(outstanding);
+                  table = `<tr><td>Total Requests</td><td>${stats.total}</td></tr>
+                           <tr><td>Total Approved</td><td>${stats.approved}</td></tr>
+                           <tr><td>Total Denied</td><td>${stats.denied}</td></tr>
+                           <tr><td>Total Amount Requested</td><td>${total}</td></tr>
+                           <tr><td>Total Amount Approved</td><td>${approved}</td></tr>
+                           <tr><td>Total Amount Denied</td><td>${denied}</td></tr>
+                           <tr><td>Total Still Outstanding</td><td>${outstanding}</td></tr>
+                           <tr><td>Most Beneficient</td><td>${stats.most}</td></tr>
+                           <tr><td>Average Request</td><td>${average}</td></tr>
+                           `;
+                  
+                  let managers = stats.totals;
+                  
+                  let createRow =  function (entry){
+                    amount = formatMoney(entry.total);
+                    let rv = `<tr><td>${entry.name}</td><td>${amount}</td><td>`;
+                    table = table + rv;
+                  
+                  }
+                  table = table + "<tr><th>Managers</th><th>Total Amount Approved</th></tr>"
+                  managers.forEach(createRow);
+                  list.innerHTML = table;
+
+                }
+
+        };
+
+    xhttp.open("get", "http://localhost:8080/AMWatch/getStats.do", true);
+    xhttp.send();
+
+
+}  
+
+function formatMoney(amount)
+        {
+        // All money is dollars with two fractional digits...right?
+        return "$" + amount.toFixed(2);
+        }
+
+getStats();
+
+        
+        </script>

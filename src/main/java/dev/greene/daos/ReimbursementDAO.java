@@ -13,6 +13,7 @@ public interface ReimbursementDAO {
 	//Read
 	Reimbursement getReimbursementByID(int id);
 	List <Reimbursement> getReimbursementsByEmployeeID(int employeeID);
+	List <Reimbursement> getReimbursementsByManagerID(int managerID);
 	List <Reimbursement> getAllReimbursements();
 	List<Reimbursement> getAllPendingReimbursements();
 	
