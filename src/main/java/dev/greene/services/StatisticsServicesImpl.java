@@ -40,7 +40,8 @@ public class StatisticsServicesImpl implements StatisticsServices {
 			double total = 0;
 			reimbursements = rDAO.getReimbursementsByManagerID(employee.getId());
 			for(Reimbursement reimbursement : reimbursements) {
-				total = total + reimbursement.getAmount();
+				if(reimbursement.getStatus() == 1)
+					total = total + reimbursement.getAmount();
 			}
 			ManagerTotals manager = new ManagerTotals();
 			manager.setId(employee.getId());
