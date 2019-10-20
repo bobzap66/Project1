@@ -99,11 +99,14 @@ public class StatisticsServicesImpl implements StatisticsServices {
 		List<ManagerTotals> totals = getTotalPerManager();
 		String most = null;
 		double total = 0;
-		for (ManagerTotals entry : totals)  
+		for (ManagerTotals entry : totals) {
+			System.out.println(entry.getTotal());
+			System.out.println(total);
             if(entry.getTotal() > total) {
+            	total = entry.getTotal();
             	most = entry.getName();
             }
-	 
+		}
 		return most;
 	}
 	@Override
