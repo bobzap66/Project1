@@ -101,12 +101,12 @@ table.blueTable tfoot .links a{
     </body>
     <script>
         let server = "http://ec2-3-83-228-218.compute-1.amazonaws.com:8080/AMWatch";
-     // let server = "localhost:8080"
+     // let server = "http://localhost:8080/AMWatch"
       function logout() {
           let xhttp = new XMLHttpRequest();
           xhttp.onreadystatechange = function() {
             if(this.readyState == 4 && this.status == 200) {
-              window.location = `${server}/AMWatch/loginPage.html`;
+              window.location = `${server}/loginPage.html`;
 
               
                     

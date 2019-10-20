@@ -104,12 +104,12 @@ table.blueTable tfoot .links a{
     </body>
     <script>
      let server = "http://ec2-3-83-228-218.compute-1.amazonaws.com:8080/AMWatch";
-     // let server = "localhost:8080"
+     // let server = "http://localhost:8080/AMWatch"
         function logout() {
           let xhttp = new XMLHttpRequest();
           xhttp.onreadystatechange = function() {
             if(this.readyState == 4 && this.status == 200) {
-              window.location = `${server}/AMWatch/loginPage.html`;
+              window.location = `${server}/loginPage.html`;
 
               
                     
@@ -117,7 +117,7 @@ table.blueTable tfoot .links a{
                 
             };  
           }
-            xhttp.open("get", `${server}/AMWatch/logout.do`, true);
+            xhttp.open("get", `${server}/logout.do`, true);
             xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhttp.send();
           
@@ -135,13 +135,13 @@ table.blueTable tfoot .links a{
                 
             };  
           }
-            xhttp.open("post", `${server}/AMWatch/updateReimbursement.do`, true);
+            xhttp.open("post", `${server}/updateReimbursement.do`, true);
             xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhttp.send(`reimbursementID=${reimbursementID}&reimbursementStatus=${reimbursementStatus}&response=${response}`);
           
         }
         function createReimbursement(){
-          window.location = `${server}/AMWatch/createReimbursement.html`;
+          window.location = `${server}/createReimbursement.html`;
         }
 
         function getEmployeeInfo(){
@@ -159,13 +159,13 @@ table.blueTable tfoot .links a{
 
         };
 
-    xhttp.open("get", `${server}/AMWatch/getEmployeeInfo.do`, true);
+    xhttp.open("get", `${server}/getEmployeeInfo.do`, true);
     xhttp.send();
 
 
 }          
 function getStats(){
-          window.location = `${server}/AMWatch/statistics.html`;
+          window.location = `${server}/statistics.html`;
         }
         function getPending(){
             let xhttp = new XMLHttpRequest();
@@ -216,7 +216,7 @@ function getStats(){
 
             };
 
-            xhttp.open("get", `${server}/AMWatch/getPendingReimbursements.do`, true);
+            xhttp.open("get", `${server}/getPendingReimbursements.do`, true);
             xhttp.send();
 
         }
@@ -285,7 +285,7 @@ function getStats(){
 
             };
 
-            xhttp.open("get", `${server}/AMWatch/getAllReimbursements.do`, true);
+            xhttp.open("get", `${server}/getAllReimbursements.do`, true);
             xhttp.send();
 
         }

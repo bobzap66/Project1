@@ -111,7 +111,7 @@
         </body>
         <script>
      let server = "http://ec2-3-83-228-218.compute-1.amazonaws.com:8080/AMWatch";
-     // let server = "localhost:8080"
+     // let server = "http://localhost:8080/AMWatch"
         function onSubmit(){
 
             
@@ -136,7 +136,7 @@
 
             };
 
-            xhttp.open("post", `${server}/AMWatch/createReimbursement.do`, true);
+            xhttp.open("post", `${server}/createReimbursement.do`, true);
             xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhttp.send(`amount=${amount}&title=${title}&comment=${comment}`);
 
