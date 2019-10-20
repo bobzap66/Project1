@@ -90,8 +90,10 @@ table.blueTable tfoot .links a{
         </body>
 
         <script>
+                let server = "http://ec2-3-83-228-218.compute-1.amazonaws.com:8080/AMWatch";
+     // let server = "localhost:8080"
             function back(){
-            window.location = "http://localhost:8080/AMWatch/managerPage.html";
+            window.location = `${server}/AMWatch/managerPage.html`;
         }
             
             function getStats(){
@@ -137,7 +139,7 @@ table.blueTable tfoot .links a{
 
         };
 
-    xhttp.open("get", "http://localhost:8080/AMWatch/getStats.do", true);
+    xhttp.open("get", `${server}/AMWatch/getStats.do`, true);
     xhttp.send();
 
 

@@ -100,11 +100,13 @@ table.blueTable tfoot .links a{
     </table>
     </body>
     <script>
+        let server = "http://ec2-3-83-228-218.compute-1.amazonaws.com:8080/AMWatch";
+     // let server = "localhost:8080"
       function logout() {
           let xhttp = new XMLHttpRequest();
           xhttp.onreadystatechange = function() {
             if(this.readyState == 4 && this.status == 200) {
-              window.location = "http://localhost:8080/AMWatch/loginPage.html";
+              window.location = `${server}/AMWatch/loginPage.html`;
 
               
                     
@@ -112,7 +114,7 @@ table.blueTable tfoot .links a{
                 
             };  
           }
-            xhttp.open("get", "http://localhost:8080/AMWatch/logout.do", true);
+            xhttp.open("get", `${server}/AMWatch/logout.do`, true);
             xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhttp.send();
           
@@ -120,7 +122,7 @@ table.blueTable tfoot .links a{
         }
 
         function createReimbursement(){
-          window.location = "http://localhost:8080/AMWatch/createReimbursement.html";
+          window.location = `${server}/AMWatch/createReimbursement.html`;
         }
 
         function getEmployeeInfo(){
@@ -137,7 +139,7 @@ table.blueTable tfoot .links a{
 
         };
 
-    xhttp.open("get", "http://localhost:8080/AMWatch/getEmployeeInfo.do", true);
+    xhttp.open("get", `${server}/AMWatch/getEmployeeInfo.do`, true);
     xhttp.send();
 
 
@@ -199,7 +201,7 @@ table.blueTable tfoot .links a{
 
             };
 
-            xhttp.open("get", "http://localhost:8080/AMWatch/getReimbursements.do", true);
+            xhttp.open("get", `${server}/AMWatch/getReimbursements.do`, true);
             xhttp.send();
         }
 
