@@ -65,15 +65,13 @@
                 let password = document.getElementById("inputPassword").value;
                 let user = null;
                 let signin = document.getElementById("Signin");
-                console.log("username = " + username + " and password = " + password);
                 
                 
                 let xhttp = new XMLHttpRequest();
                 
             xhttp.onreadystatechange = function() {
-                console.log(this.readyState + this.status);
                 if(this.readyState == 4 && this.status == 200) {
-                  console.log(this.responseText);
+   
         
                     user = JSON.parse(this.responseText);
                     if((user.password === "-1")||(user.password === "-2")){

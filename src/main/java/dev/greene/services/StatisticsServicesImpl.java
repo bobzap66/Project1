@@ -100,8 +100,6 @@ public class StatisticsServicesImpl implements StatisticsServices {
 		String most = null;
 		double total = 0;
 		for (ManagerTotals entry : totals) {
-			System.out.println(entry.getTotal());
-			System.out.println(total);
             if(entry.getTotal() > total) {
             	total = entry.getTotal();
             	most = entry.getName();
