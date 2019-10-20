@@ -79,9 +79,9 @@
                       signin.innerHTML ="Invalid username/password. Please sign in."
                     } else if ((user.rank === "Commander") || (user.rank === "Captain")) {
                       //need to forward to next page with employee id. Not sure how yet
-                      window.location = `${server}/AMWatch/managerPage.html`;
+                      window.location = `${server}/managerPage.html`;
                     } else {
-                      window.location = `${server}/AMWatch/employeePage.html`;
+                      window.location = `${server}/employeePage.html`;
 
                     }
                  
@@ -91,7 +91,7 @@
                 
             };
 
-            xhttp.open("post", `${server}/AMWatch/login.do`, true);
+            xhttp.open("post", `${server}/login.do`, true);
             xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhttp.send(`username=${username}&password=${password}`);
    
