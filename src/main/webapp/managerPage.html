@@ -124,7 +124,6 @@ table.blueTable tfoot .links a{
 
         }
         function reply(reimbursementID, reimbursementStatus, response) {
-          console.log("reply called.")
           let xhttp = new XMLHttpRequest();
           xhttp.onreadystatechange = function() {
             if(this.readyState == 4 && this.status == 200) {
@@ -351,7 +350,6 @@ function getStats(){
               x = rows[i].getElementsByTagName("TD")[column];
               y = rows[i + 1].getElementsByTagName("TD")[column];
               //check if the two rows should switch place:
-              console.log(x.value);
               if (x.value > y.value) {
               //if so, mark as a switch and break the loop:
               shouldSwitch = true;
