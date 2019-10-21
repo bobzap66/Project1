@@ -119,12 +119,12 @@
             let amount = document.getElementById("amount").value;
             let title = document.getElementById("title").value;
             let comment = document.getElementById("description").value;
-            let p = document.getElementById("reimbursementHead");
+            let reimbursementHead = document.getElementById("reimbursemenHead");
             console.log(`amount = ${amount} title = ${title} comment = ${comment}`);
             let reimbursement = null;
             if(amount <= 0)
             {
-                p.innerHTML = "Reimbursements must be greater than 0";
+                reimbursementHead.innerHTML = "Reimbursements must be greater than 0";
                 return;
             }
 
