@@ -83,7 +83,7 @@ table.blueTable tfoot .links a{
     <th onclick="sortTable(0)">Reimbursement ID</th>
     <th onclick="sortTable(1)">Title</th>
     <th onclick="sortTable(2)">Description</th>
-    <th onclick="sortTable(10)">Amount</th>
+    <th onclick="sortNumbers(10)">Amount</th>
     <th onclick="sortTable(4)">Employee ID</th>
     <th onclick="sortTable(9)">Date Requested</th>
     <th onclick="sortTable(6)" id="statusHead">Status</th>
@@ -358,7 +358,7 @@ function getStats(){
                 y = parseFloat(y);
               }
               // console.log(x);
-              if (x>y) {
+              if (Number(x.innerHTML)>Number(y.innerHTML)) {
               //if so, mark as a switch and break the loop:
               shouldSwitch = true;
               break;
