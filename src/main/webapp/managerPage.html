@@ -203,7 +203,7 @@ function getStats(){
                         let rv = `<tr><td>${reimbursement.reimbursementID}</td><td>${reimbursement.title}</td>
                           <td>${comment}</td><td>${amount}</td><td>${reimbursement.EmployeeID}</td><td>${date.toDateString()}</td><td><input type="text" id="response${reimbursement.reimbursementID}"></td>
                           <td><button  onclick='reply(${reimbursement.reimbursementID}, -1, document.getElementById("response${reimbursement.reimbursementID}" ).value)'style = "background-color:red; color:white ">&#88;</button></td> 
-                          <td><button onclick='reply(${reimbursement.reimbursementID}, 1, document.getElementById("response${reimbursement.reimbursementID}").value)' style = "background-color:green; color:white">&#10003;</button></td><td style="display:none;>${reimbursement.time}</td></tr>`;
+                          <td><button onclick='reply(${reimbursement.reimbursementID}, 1, document.getElementById("response${reimbursement.reimbursementID}").value)' style = "background-color:green; color:white">&#10003;</button></td><td style="display:none;">${reimbursement.time}</td></tr>`;
                         table = table + rv;
                     }
                     reimbursements.forEach(createRow);
@@ -272,7 +272,7 @@ function getStats(){
                         let time = reimbursement.time;
                         let date = new Date(time);
 
-                        let rv = `<tr><td>${reimbursement.reimbursementID}</td><td>${reimbursement.title}</td><td>${comment}</td><td>${amount}</td><td>${reimbursement.EmployeeID}</td><td>${date.toDateString()}</td><td>${status}</td><td>${manager}</td><td>${response}</td><td style="display:none;>${reimbursement.time}</td></tr>`;
+                        let rv = `<tr><td>${reimbursement.reimbursementID}</td><td>${reimbursement.title}</td><td>${comment}</td><td>${amount}</td><td>${reimbursement.EmployeeID}</td><td>${date.toDateString()}</td><td>${status}</td><td>${manager}</td><td>${response}</td><td style="display:none;"">${reimbursement.time}</td></tr>`;
                         table = table + rv;
                     }
                     reimbursements.forEach(createRow);
