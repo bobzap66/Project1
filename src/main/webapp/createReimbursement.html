@@ -73,7 +73,7 @@
 
         <body style="background: #1C6EA4; color:#FFFFFF">
             <h2>Reimbursement Form</h2>
-            <p>Fill out your reimbursement form. You probably won't get any money, though.</p>
+            <p id = "reimbursemenHead">Fill out your reimbursement form. You probably won't get any money, though.</p>
             <button onclick="back()" style = "background-color:#FFFFFF">Back to EmployeePage</button>
                 
             <div class="container" style = "background: #D0E4F5; color:#1C6EA4">
@@ -91,7 +91,7 @@
                             <label for="title">Reason</label>
                         </div>
                         <div class="col-75">
-                            <input type="text" id="title" name="title" placeholder="What's it for?">
+                            <input type="text" id="title" name="title" placeholder="What's it for?" maxlength = 195>
                         </div>
                     </div>
 
@@ -100,7 +100,7 @@
                             <label for="subject">Description</label>
                         </div>
                         <div class="col-75">
-                            <textarea id="description" name="description" placeholder="Why did you need to spend it?" style="height:200px"></textarea>
+                            <textarea id="description" name="description" placeholder="Why did you need to spend it?" style="height:200px" maxlength = 195></textarea>
                         </div>
                     </div>
                     <div class="row">
@@ -119,8 +119,14 @@
             let amount = document.getElementById("amount").value;
             let title = document.getElementById("title").value;
             let comment = document.getElementById("description").value;
+            let p = document.getElementById("reimbursementHead");
             console.log(`amount = ${amount} title = ${title} comment = ${comment}`);
             let reimbursement = null;
+            if(amount <= 0)
+            {
+                p.innerHTML = "Reimbursements must be greater than 0";
+                return;
+            }
 
 
             let xhttp = new XMLHttpRequest();
